@@ -1,0 +1,61 @@
+version: "3.8"
+
+services:
+  ls_app:
+    container_name: ls_app
+    restart: unless-stopped
+    build:
+      context: .
+      dockerfile: docker/Dockerfile
+    command: sh ./docker/shell/start.sh
+    environment:
+      - NODE_ENV=dev
+    volumes:
+      - ./:/var/www
+      - /var/www/node_modules
+    ports:
+      - 3333:3333
+    networks:
+      - default
+
+  ls_webserver:
+    image: nginx:1.19-alpine
+    container_name: ls_webserver
+    restart: unless-stopped
+    tty: true
+    ports:
+      - 80:80
+      - 443:443
+    volumes:
+      - ./:/var/www:cached
+      - ./docker/nginx/conf.d/:/etc/nginx/conf.d/
+    networks:
+      - default
+
+  ls_db:
+    image: mariadb/server:latest
+    container_name: ls_db
+    restart: unless-stopped
+    tty: true
+    ports:
+      - 3306:3306
+    environment:
+      MYSQL_DATABASE: little-scout
+      MYSQL_ROOT_PASSWORD: secret
+      SERVICE_TAGS: dev
+      SERVICE_NAME: mysql
+    volumes:
+      - dbdata:/var/lib/mysql/
+      - ./docker/mysql/my.cnf:/etc/mysql/my.cnf
+    networks:
+      - default
+
+networks:
+  default:
+    driver: bridge
+
+volumes:
+  dbdata:
+    driver: local
+  redis:
+    driver: local
