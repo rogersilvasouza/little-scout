@@ -18,3 +18,4 @@ database/*.sqlite
 # Project
 .config
 .npm
+.DS_Store
