@@ -6,7 +6,7 @@ const axios = use('axios')
 
 class Example extends Task {
   static get schedule() {
-    return '* * * * * *'
+    return '30 * * * * *'
   }
 
   async handle() {
@@ -21,7 +21,7 @@ class Example extends Task {
 
           axios.get(`https://www.futbin.com/21/playerPrices?player=${id}`)
             .then(function (response) {
-              console.log('Renato Sanches')
+              console.log('Leandro Chichizola')
               console.log(response.data[id]['prices']['ps']['LCPrice'])
               // console.log(response.data[id]['prices']['ps']['LCPrice2']);
               // console.log(response.data[id]['prices']['ps']['LCPrice3']);
@@ -37,7 +37,7 @@ class Example extends Task {
       }
     });
 
-    c.queue('https://www.futbin.com/21/player/1020/renato-sanches')
+    c.queue('https://www.futbin.com/21/player/3594/leandro-chichizola')
   }
 }
 
